@@ -4,7 +4,7 @@ export const PRODUCT = {
     name: "High Speed Turbine Mini Neck Fan N607 (Digital Display)",
     nameBn: "হাই স্পিড টারবাইন মিনি নেক ফ্যান N607 (ডিজিটাল ডিসপ্লে)",
     price: 990,
-    regularPrice: 1200,
+    regularPrice: 1250,
     images: [
         "/images/O1CN01AyXDtE1iBLTn93MDO_!!2220650294374-0-cib.jpg",
         "/images/O1CN01YXM9i71iBLTmY97PE_!!2220650294374-0-cib.jpg",
@@ -20,8 +20,8 @@ export const PRODUCT = {
     ],
     specs: [
         { label: "মডেল", value: "N607" },
-        { label: "ব্যাটারি", value: "1000-1200mAh" },
-        { label: "ব্যাকআপ", value: "১-৩ ঘণ্টা" },
+        { label: "ব্যাটারি", value: "1800mAh" },
+        { label: "ব্যাকআপ", value: "৩-৬ ঘণ্টা" },
         { label: "চার্জিং", value: "USB" },
         { label: "মোটর", value: "ব্রাশলেস মোটর" },
         { label: "ওজন", value: "২৭০ গ্রাম" },

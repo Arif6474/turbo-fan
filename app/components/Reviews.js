@@ -22,7 +22,7 @@ const Reviews = () => (
                     { name: "নাহিদ আহমেদ", text: "অফিসে ব্যবহারের জন্য এর থেকে ভালো প্রোডাক্ট আর হতে পারে না। দেখতেও খুব স্টাইলিশ, ডিজিটাল ডিসপ্লেটা অসাম!", rating: 5, date: "১ সপ্তাহ আগে" },
                     { name: "সুমাইয়া ইসলাম", text: "খুবই হালকা আর আরামদায়ক। গায়ের জোরে বাতাস মুখে লাগে না বরং চারপাশ দিয়ে ঠান্ডা বাতাস আসে।", rating: 5, date: "২ সপ্তাহ আগে" }
                 ].map((r, i) => (
-                    <div key={i} className="bg-white p-8 rounded-[2rem] shadow-sm border border-zinc-100 flex flex-col justify-between hover:shadow-2xl hover:shadow-zinc-200/50 transition-all duration-300">
+                    <div key={i} className="bg-white p-8 rounded-4xl shadow-sm border border-zinc-100 flex flex-col justify-between hover:shadow-2xl hover:shadow-zinc-200/50 transition-all duration-300">
                         <div className="space-y-4">
                             <div className="flex gap-1 bg-yellow-50 w-fit px-3 py-1.5 rounded-full">
                                 {[...Array(5)].map((_, idx) => (

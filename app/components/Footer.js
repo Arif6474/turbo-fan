@@ -48,7 +48,7 @@ const Footer = () => (
 
         </div>
 
-        <div className="max-w-5xl mx-auto h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-8"></div>
+        <div className="max-w-5xl mx-auto h-px bg-linear-to-r from-transparent via-white/10 to-transparent my-8"></div>
         <p className="text-center text-sm font-medium tracking-wide">© ২০২৪ Neck Fan Store. সর্বস্বত্ব সংরক্ষিত।</p>
     </footer>
 );

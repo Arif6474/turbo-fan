@@ -17,7 +17,7 @@ const Gallery = () => {
         <section className="pt-24 pb-12 px-4 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
             {/* Product Image Slider */}
             <div className="relative group w-full">
-                <div className="aspect-square bg-zinc-50 rounded-[2rem] overflow-hidden relative cursor-zoom-in border border-zinc-100 shadow-xl shadow-zinc-200/50" onClick={() => setZoomOpen(true)}>
+                <div className="aspect-square bg-zinc-50 rounded-4xl overflow-hidden relative cursor-zoom-in border border-zinc-100 shadow-xl shadow-zinc-200/50" onClick={() => setZoomOpen(true)}>
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={current}
@@ -77,7 +77,7 @@ const Gallery = () => {
                     <div className="flex flex-col">
                         <div className="flex items-center gap-3">
                             <span className="text-xl text-zinc-400 line-through font-bold">৳{PRODUCT.regularPrice}</span>
-                            <span className="bg-red-500 text-white px-2 py-0.5 rounded text-xs font-black shadow-sm">Save ৳{PRODUCT.regularPrice - PRODUCT.price}</span>
+                            <span className="bg-red-500 text-white px-2 py-0.5 rounded text-[10px] font-black shadow-sm">২০% ডিসকাউন্ট অফার</span>
                         </div>
                         <div className="text-[2.75rem] font-black text-teal-600 leading-none mt-1">
                             ৳{PRODUCT.price}
@@ -101,11 +101,11 @@ const Gallery = () => {
 
             {/* Lightbox */}
             {zoomOpen && (
-                <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setZoomOpen(false)}>
+                <div className="fixed inset-0 z-100 bg-black/95 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setZoomOpen(false)}>
                     <button type="button" className="absolute top-6 right-6 text-white p-3 hover:bg-white/10 rounded-full transition-colors z-50 border border-white/10">
                         <X className="w-8 h-8" />
                     </button>
-                    <div className="relative w-full max-w-4xl aspect-[4/5] md:aspect-square" onClick={(e) => e.stopPropagation()}>
+                    <div className="relative w-full max-w-4xl aspect-4/5 md:aspect-square" onClick={(e) => e.stopPropagation()}>
                         <Image src={PRODUCT.images[current]} alt="Full view" fill className="object-contain" />
                     </div>
                 </div>

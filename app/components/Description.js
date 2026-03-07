@@ -7,9 +7,9 @@ import { Wind, Truck, Package, VolumeX, BatteryCharging } from "lucide-react";
 const Description = () => (
     <section className="py-24 px-4 max-w-5xl mx-auto">
         <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
-            <div className="relative aspect-[4/5] rounded-[2.5rem] overflow-hidden shadow-2xl border border-zinc-100">
+            <div className="relative aspect-4/5 rounded-[2.5rem] overflow-hidden shadow-2xl border border-zinc-100">
                 <Image src="/images/7.jpeg" alt="Lifestyle" fill className="object-cover" />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-8">
+                <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 to-transparent p-8">
                     <div className="text-white font-bold text-lg flex items-center gap-3">
                         <Wind className="w-6 h-6 text-teal-400" />
                         শক্তিশালী ঠাণ্ডা বাতাস

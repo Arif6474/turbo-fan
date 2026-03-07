@@ -18,7 +18,7 @@ const FAQ = () => {
             <div className="max-w-3xl mx-auto space-y-5">
                 <h2 className="text-3xl md:text-4xl font-black text-center mb-16 text-zinc-900">সাধারণ কিছু প্রশ্ন (FAQ)</h2>
                 {items.map((item, i) => (
-                    <div key={i} className={`rounded-[2rem] border transition-all duration-300 overflow-hidden ${open === i ? "border-teal-200 bg-teal-50/30 shadow-lg shadow-teal-900/5" : "border-zinc-200 bg-white hover:border-teal-200"}`}>
+                    <div key={i} className={`rounded-4xl border transition-all duration-300 overflow-hidden ${open === i ? "border-teal-200 bg-teal-50/30 shadow-lg shadow-teal-900/5" : "border-zinc-200 bg-white hover:border-teal-200"}`}>
                         <button type="button" onClick={() => setOpen(open === i ? -1 : i)} className="w-full text-left p-6 md:p-8 flex justify-between items-center outline-none">
                             <span className={`font-black text-lg md:text-xl pr-8 ${open === i ? "text-teal-700" : "text-zinc-800"}`}>{item.q}</span>
                             <div className={`w-10 h-10 shrink-0 rounded-full flex items-center justify-center transition-all duration-300 ${open === i ? "bg-teal-600 text-white rotate-45" : "bg-zinc-100 text-zinc-600"}`}>

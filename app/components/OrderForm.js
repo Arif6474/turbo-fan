@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { CheckCircle2, Minus, Plus, User, Phone, MapPin, Truck, ShieldCheck, Lock, X, ShoppingBag } from "lucide-react";
+import { CheckCircle2, Minus, Plus, User, Phone, MapPin, Truck, ShieldCheck, Lock, X, ShoppingBag, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PRODUCT } from "../constants";
 
@@ -13,7 +13,7 @@ const SuccessPopup = ({ isOpen, onClose, info, total }) => (
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-zinc-900/60 backdrop-blur-sm"
+                className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-zinc-900/60 backdrop-blur-sm"
             >
                 <motion.div
                     initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -101,6 +101,9 @@ const OrderForm = () => {
             <div className="max-w-3xl mx-auto space-y-10">
                 {/* Header */}
                 <div className="text-center">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-red-50 text-red-600 rounded-full text-xs font-black w-fit tracking-wider border border-red-100 shadow-sm mb-4">
+                        <Zap className="w-3.5 h-3.5 fill-red-600" /> ২০% ডিসকাউন্ট অফার চলছে!
+                    </div>
                     <h2 className="text-2xl md:text-3xl font-black text-teal-600 mb-2 leading-tight">
                         অর্ডার করতে সঠিক তথ্য দিয়ে<br />নিচের ফর্ম টি পূরণ করুন
                     </h2>
