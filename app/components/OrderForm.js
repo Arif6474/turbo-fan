@@ -2,9 +2,55 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { CheckCircle2, Minus, Plus, User, Phone, MapPin, Truck, ShieldCheck, Lock } from "lucide-react";
+import { CheckCircle2, Minus, Plus, User, Phone, MapPin, Truck, ShieldCheck, Lock, X, ShoppingBag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PRODUCT } from "../constants";
+
+const SuccessPopup = ({ isOpen, onClose, info, total }) => (
+    <AnimatePresence>
+        {isOpen && (
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-zinc-900/60 backdrop-blur-sm"
+            >
+                <motion.div
+                    initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                    transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                    className="bg-white rounded-[2.5rem] w-full max-w-lg overflow-hidden shadow-2xl relative"
+                >
+                    <button
+                        onClick={onClose}
+                        className="absolute top-6 right-6 p-2 hover:bg-zinc-100 rounded-full transition-colors text-zinc-400 hover:text-zinc-600"
+                    >
+                        <X className="w-6 h-6" />
+                    </button>
+
+                    <div className="p-8 md:p-10 flex flex-col items-center text-center">
+                        <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.2, type: "spring", damping: 12, stiffness: 200 }}
+                            className="w-20 h-20 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center mb-6"
+                        >
+                            <CheckCircle2 className="w-10 h-10" />
+                        </motion.div>
+
+                        <h2 className="text-3xl font-black text-zinc-900 mb-2">ধন্যবাদ, {info.name}!</h2>
+                        <p className="text-lg text-zinc-500 font-medium mb-8">আপনার অর্ডারটি সফলভাবে গ্রহণ করা হয়েছে। আমাদের প্রতিনিধি শীঘ্রই আপনার সাথে যোগাযোগ করবেন।</p>
+
+
+
+
+                    </div>
+                </motion.div>
+            </motion.div>
+        )}
+    </AnimatePresence>
+);
 
 const OrderForm = () => {
     const [items, setItems] = useState(
@@ -17,6 +63,7 @@ const OrderForm = () => {
 
     const [district, setDistrict] = useState("dhaka");
     const [info, setInfo] = useState({ name: "", phone: "", address: "" });
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const selectedItems = items.filter(item => item.selected);
     const totalQty = selectedItems.reduce((sum, item) => sum + item.qty, 0);
@@ -42,13 +89,11 @@ const OrderForm = () => {
         e.preventDefault();
         if (selectedItems.length === 0) return alert("দয়া করে অন্তত একটি প্রোডাক্ট সিলেক্ট করুন!");
 
-        let productsText = "";
-        selectedItems.forEach(item => {
-            productsText += `- ${item.color.name}: ${item.qty} পিস\n`;
-        });
+        // In a real app, you'd send this to an API
+        console.log("Submitting Order:", { items: selectedItems, info, district, total });
 
-        const text = `নুতন অর্ডার\n---\nপণ্য: ${PRODUCT.name}\n${productsText}\nনাম: ${info.name}\nমোবাইল: ${info.phone}\nঠিকানা: ${info.address}\nজেলা: ${district === 'dhaka' ? 'ঢাকা' : 'ঢাকার বাইরে'}\nসর্বমোট টাকা: ${total}৳`;
-        window.open(`https://wa.me/8801234567890?text=${encodeURIComponent(text)}`);
+        setShowSuccess(true);
+        // We still provide the WA link in the popup for manual confirmation if they want
     };
 
     return (
@@ -102,7 +147,7 @@ const OrderForm = () => {
                                                 exit={{ scale: 0, opacity: 0 }}
                                                 className="absolute top-3 right-3 w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center text-white z-20 shadow-lg shadow-teal-600/20"
                                             >
-                                               <div className="w-4 h-4 bg-white rounded-full"></div>
+                                                <div className="w-4 h-4 bg-white rounded-full"></div>
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
@@ -353,6 +398,13 @@ const OrderForm = () => {
                     </div>
                 </form>
             </div>
+
+            <SuccessPopup
+                isOpen={showSuccess}
+                onClose={() => setShowSuccess(false)}
+                info={info}
+                total={total}
+            />
         </section>
     );
 };
