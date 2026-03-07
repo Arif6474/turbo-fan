@@ -94,6 +94,18 @@ const OrderForm = () => {
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
+                                    <AnimatePresence>
+                                        {!item.selected && (
+                                            <motion.div
+                                                initial={{ scale: 0, opacity: 0 }}
+                                                animate={{ scale: 1, opacity: 1 }}
+                                                exit={{ scale: 0, opacity: 0 }}
+                                                className="absolute top-3 right-3 w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center text-white z-20 shadow-lg shadow-teal-600/20"
+                                            >
+                                               <div className="w-4 h-4 bg-white rounded-full"></div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
 
                                     {/* Image Container */}
                                     <div className="relative w-24 h-24 md:w-32 md:h-32 bg-zinc-50 rounded-2xl overflow-hidden shrink-0 border border-zinc-100 group-hover:shadow-inner transition-all duration-500">
