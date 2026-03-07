@@ -20,7 +20,10 @@ import {
   ChevronLeft,
   X,
   Facebook,
-  Lock
+  Lock,
+  User,
+  Phone,
+  MapPin
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -332,7 +335,7 @@ const OrderForm = () => {
       qty: 1
     }))
   );
-  
+
   const [district, setDistrict] = useState("dhaka");
   const [info, setInfo] = useState({ name: "", phone: "", address: "" });
 
@@ -359,7 +362,7 @@ const OrderForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (selectedItems.length === 0) return alert("দয়া করে অন্তত একটি প্রোডাক্ট সিলেক্ট করুন!");
-    
+
     let productsText = "";
     selectedItems.forEach(item => {
       productsText += `- ${item.color.name}: ${item.qty} পিস\n`;
@@ -372,7 +375,7 @@ const OrderForm = () => {
   return (
     <section id="order" className="py-16 md:py-24 px-4 bg-[#f9f9f9] border-t border-zinc-200">
       <div className="max-w-3xl mx-auto space-y-10">
-        
+
         {/* Header */}
         <div className="text-center">
           <h2 className="text-2xl md:text-3xl font-black text-teal-600 mb-2 leading-tight">
@@ -381,167 +384,292 @@ const OrderForm = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-10">
-          
+
           {/* Your Products Section */}
-          <div className="space-y-4">
-            <h3 className="text-xl md:text-2xl font-black text-zinc-800">Your Products</h3>
-            
-            <div className="space-y-4">
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl md:text-2xl font-black text-zinc-800">Your Products</h3>
+              <span className="bg-teal-50 text-teal-700 text-xs font-bold px-3 py-1 rounded-full border border-teal-100">
+                {selectedItems.length} সিলেক্ট করা হয়েছে
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4">
               {items.map((item, idx) => (
-                <div key={idx} className={`bg-white border rounded-lg p-4 flex gap-4 transition-all duration-300 ${item.selected ? 'border-teal-600 shadow-sm' : 'border-zinc-200 opacity-60 hover:opacity-100'}`}>
-                  
-                  {/* Checkbox */}
-                  <div className="pt-2 cursor-pointer flex-shrink-0" onClick={() => toggleItemSelection(idx)}>
-                    <div className={`w-5 h-5 rounded flex items-center justify-center border transition-colors ${item.selected ? 'bg-teal-600 border-teal-600' : 'bg-white border-zinc-300'}`}>
-                       {item.selected && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
-                    </div>
+                <div
+                  key={idx}
+                  onClick={() => toggleItemSelection(idx)}
+                  className={`group relative bg-white border-2 rounded-[1.5rem] p-4 md:p-5 flex gap-4 md:gap-6 transition-all duration-500 cursor-pointer overflow-hidden ${item.selected
+                    ? 'border-teal-600 shadow-xl shadow-teal-900/5 bg-teal-50/10'
+                    : 'border-zinc-100 hover:border-teal-200'
+                    }`}
+                >
+                  {/* Selection Indicator Badge */}
+                  <AnimatePresence>
+                    {item.selected && (
+                      <motion.div
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0, opacity: 0 }}
+                        className="absolute top-3 right-3 w-6 h-6 bg-teal-600 rounded-full flex items-center justify-center text-white z-20 shadow-lg shadow-teal-600/20"
+                      >
+                        <CheckCircle2 className="w-4 h-4" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Image Container */}
+                  <div className="relative w-24 h-24 md:w-32 md:h-32 bg-zinc-50 rounded-2xl overflow-hidden shrink-0 border border-zinc-100 group-hover:shadow-inner transition-all duration-500">
+                    <Image
+                      src={item.color.image}
+                      alt={item.color.name}
+                      fill
+                      className={`object-cover p-2 mix-blend-multiply transition-transform duration-700 ${item.selected ? 'scale-110' : 'group-hover:scale-110'}`}
+                    />
+                    {!item.selected && (
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-500"></div>
+                    )}
                   </div>
 
-                  {/* Details */}
+                  {/* Details & Controls */}
                   <div className="flex-1 flex flex-col justify-between">
-                    <div className="flex gap-4">
-                      {/* Image */}
-                      <div className="w-20 h-20 md:w-24 md:h-24 bg-zinc-50 border border-zinc-100 rounded relative overflow-hidden shrink-0">
-                        <Image src={item.color.image} alt={item.color.name} fill className="object-cover p-1 mix-blend-multiply" />
-                      </div>
-
-                      <div>
-                        <h4 className="font-bold text-zinc-800 text-base md:text-lg leading-tight">
-                          {PRODUCT.nameBn} - 
-                          <span className="text-zinc-600 block mt-1 text-sm md:inline md:mt-0 font-normal">{item.color.name}</span>
+                    <div>
+                      <div className="flex justify-between items-start">
+                        <h4 className={`font-black text-lg md:text-xl transition-colors duration-300 ${item.selected ? 'text-teal-900' : 'text-zinc-800'}`}>
+                          {PRODUCT.nameBn}
+                          <span className={`block text-sm font-bold mt-0.5 transition-colors ${item.selected ? 'text-teal-600' : 'text-zinc-500'}`}>
+                            কালার: {item.color.name}
+                          </span>
                         </h4>
-                        <div className="flex items-center gap-2 mt-1 font-bold">
-                           <span className="text-zinc-500 text-sm">× 1</span>
-                        </div>
-                        <p className="text-xs text-zinc-500 mt-2 leading-relaxed hidden md:block">
-                          হাই স্পিড টারবাইন মিনি নেক ফ্যান, ৫টি স্পিড কন্ট্রোল এবং ডিজিটাল ডিসপ্লে। 
-                        </p>
                       </div>
+                      <p className="text-xs md:text-sm text-zinc-500 mt-2 leading-relaxed line-clamp-2 md:line-clamp-none">
+                        প্রিমিয়াম কোয়ালিটি টারবাইন নেক ফ্যান। ৫টি স্পিড কন্ট্রোল এবং ডিজিটাল ডিসপ্লে প্যানেল।
+                      </p>
                     </div>
 
-                    <div className="flex items-center justify-between mt-4 md:mt-2 md:pl-28">
-                       {/* Qty Counter */}
-                       <div className="flex items-center border border-zinc-200 rounded bg-white shadow-sm">
-                         <button type="button" onClick={() => updateItemQty(idx, item.qty - 1)} className="px-3 py-1 text-zinc-500 hover:bg-zinc-50 active:bg-zinc-100 transition-colors text-lg"><Minus className="w-4 h-4" /></button>
-                         <span className="px-3 py-1 font-bold text-zinc-800 border-x border-zinc-200 min-w-[2rem] text-center text-sm">{item.qty}</span>
-                         <button type="button" onClick={() => updateItemQty(idx, item.qty + 1)} className="px-3 py-1 text-zinc-500 hover:bg-zinc-50 active:bg-zinc-100 transition-colors text-lg"><Plus className="w-4 h-4" /></button>
-                       </div>
+                    <div className="flex items-center justify-between mt-4 md:mt-2" onClick={(e) => e.stopPropagation()}>
+                      {/* Qty Counter */}
+                      <div className="flex items-center bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-sm hover:border-teal-300 transition-colors">
+                        <button
+                          type="button"
+                          onClick={() => updateItemQty(idx, item.qty - 1)}
+                          className="p-2 md:p-2.5 text-zinc-400 hover:text-teal-600 hover:bg-teal-50 transition-all active:scale-90"
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+                        <span className="w-10 md:w-12 text-center font-black text-zinc-800 text-sm md:text-base border-x border-zinc-100">
+                          {item.qty}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => updateItemQty(idx, item.qty + 1)}
+                          className="p-2 md:p-2.5 text-zinc-400 hover:text-teal-600 hover:bg-teal-50 transition-all active:scale-90"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
 
-                       {/* Price */}
-                       <div className="text-right">
-                         <span className="line-through text-zinc-400 font-medium mr-2 text-xs md:text-sm">৳{(PRODUCT.regularPrice * item.qty).toFixed(2)}</span>
-                         <span className="font-black text-zinc-900 text-base md:text-lg">৳{(PRODUCT.price * item.qty).toFixed(2)}</span>
-                       </div>
+                      {/* Pricing Info */}
+                      <div className="text-right flex flex-col">
+                        <span className="text-[10px] md:text-xs font-bold text-zinc-400 line-through">
+                          ৳{(PRODUCT.regularPrice * item.qty).toFixed(2)}
+                        </span>
+                        <span className={`font-black text-lg md:text-2xl transition-colors duration-300 ${item.selected ? 'text-teal-600' : 'text-zinc-900'}`}>
+                          ৳{(PRODUCT.price * item.qty).toFixed(2)}
+                        </span>
+                      </div>
                     </div>
                   </div>
-
                 </div>
               ))}
             </div>
           </div>
 
           {/* Billing & Shipping Section */}
-          <div className="space-y-6 pt-6 mt-6 md:pt-8 md:mt-8 border-t border-zinc-200">
-            <h3 className="text-xl md:text-2xl font-black text-zinc-800">Billing & Shipping</h3>
-            
-            <div className="space-y-5">
-              <div className="space-y-1.5">
-                <label className="text-sm font-bold text-zinc-700">Name <span className="text-red-500">*</span></label>
-                <input required value={info.name} onChange={e => setInfo({ ...info, name: e.target.value })} className="w-full bg-white border border-zinc-300 rounded px-4 py-3 focus:ring-1 focus:ring-teal-600 focus:border-teal-600 outline-none transition-all shadow-sm font-medium" placeholder="আপনার নাম লিখুন" />
-              </div>
-              
-              <div className="space-y-1.5">
-                <label className="text-sm font-bold text-zinc-700">Phone <span className="text-red-500">*</span></label>
-                <input required type="tel" value={info.phone} onChange={e => setInfo({ ...info, phone: e.target.value })} className="w-full bg-white border border-zinc-300 rounded px-4 py-3 focus:ring-1 focus:ring-teal-600 focus:border-teal-600 outline-none transition-all shadow-sm font-medium" placeholder="০১৭XXXXXXXX" />
+          <div className="space-y-8 pt-10 mt-10 border-t border-zinc-100">
+            <div className="space-y-2">
+              <h3 className="text-2xl md:text-3xl font-black text-zinc-900">Billing & Shipping</h3>
+              <p className="text-zinc-500 font-medium">ডেলিভারির তথ্য দিয়ে অর্ডারটি সম্পন্ন করুন।</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-zinc-700 flex items-center gap-2 ml-1">
+                  <User className="w-4 h-4 text-teal-600" /> Name <span className="text-red-500">*</span>
+                </label>
+                <div className="relative group">
+                  <input
+                    required
+                    value={info.name}
+                    onChange={e => setInfo({ ...info, name: e.target.value })}
+                    className="w-full bg-white border-2 border-zinc-100 rounded-3xl px-6 py-4 focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600 outline-none transition-all font-bold text-lg text-zinc-800 shadow-sm placeholder:text-zinc-300"
+                    placeholder="আপনার নাম লিখুন"
+                  />
+                </div>
               </div>
 
-              <div className="space-y-1.5">
-                <label className="text-sm font-bold text-zinc-700">Address <span className="text-red-500">*</span></label>
-                <textarea required value={info.address} onChange={e => setInfo({ ...info, address: e.target.value })} className="w-full bg-white border border-zinc-300 rounded px-4 py-3 focus:ring-1 focus:ring-teal-600 focus:border-teal-600 outline-none transition-all shadow-sm h-24 resize-none font-medium" placeholder="Street address"></textarea>
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-zinc-700 flex items-center gap-2 ml-1">
+                  <Phone className="w-4 h-4 text-teal-600" /> Phone <span className="text-red-500">*</span>
+                </label>
+                <div className="relative group">
+                  <input
+                    required
+                    type="tel"
+                    value={info.phone}
+                    onChange={e => setInfo({ ...info, phone: e.target.value })}
+                    className="w-full bg-white border-2 border-zinc-100 rounded-3xl px-6 py-4 focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600 outline-none transition-all font-bold text-lg text-zinc-800 shadow-sm placeholder:text-zinc-300"
+                    placeholder="০১৭XXXXXXXX"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-sm font-bold text-zinc-700 flex items-center gap-2 ml-1">
+                  <MapPin className="w-4 h-4 text-teal-600" /> Address <span className="text-red-500">*</span>
+                </label>
+                <div className="relative group">
+                  <textarea
+                    required
+                    value={info.address}
+                    onChange={e => setInfo({ ...info, address: e.target.value })}
+                    className="w-full bg-white border-2 border-zinc-100 rounded-3xl px-6 py-4 focus:ring-4 focus:ring-teal-500/10 focus:border-teal-600 outline-none transition-all font-bold text-lg text-zinc-800 h-32 resize-none shadow-sm placeholder:text-zinc-300"
+                    placeholder="আপনার সম্পূর্ণ ঠিকানা লিখুন (গ্রাম, ডাকঘর, থানা, জেলা)"
+                  ></textarea>
+                </div>
               </div>
             </div>
           </div>
 
           <div className="space-y-4 pt-4 hidden md:block">
-             <h3 className="text-lg font-bold text-zinc-800">Additional information</h3>
+            <h3 className="text-lg font-bold text-zinc-800">Additional information</h3>
           </div>
 
           {/* Shipping Choice */}
-          <div className="space-y-4 pt-6 md:pt-0">
-            <h3 className="text-xl md:text-2xl font-black text-zinc-800">Shipping</h3>
-            <div className="grid grid-cols-1 gap-3">
-               <label className={`flex items-center gap-4 p-4 border rounded cursor-pointer transition-all w-full ${district === 'dhaka' ? 'border-teal-600 bg-teal-50' : 'bg-white border-zinc-300 hover:border-zinc-400'}`}>
-                  <input type="radio" checked={district === 'dhaka'} onChange={() => setDistrict('dhaka')} className="w-4 h-4 accent-teal-600" />
-                  <span className="flex-1 font-medium text-zinc-700 text-sm md:text-base">ঢাকার ভেতরে হোম ডেলিভারি মাত্র</span>
-               </label>
-               <label className={`flex items-center gap-4 p-4 border rounded cursor-pointer transition-all w-full ${district === 'outside' ? 'border-teal-600 bg-teal-50' : 'bg-white border-zinc-300 hover:border-zinc-400'}`}>
-                  <input type="radio" checked={district === 'outside'} onChange={() => setDistrict('outside')} className="w-4 h-4 accent-teal-600" />
-                  <span className="flex-1 font-medium text-zinc-700 text-sm md:text-base">সারাদেশে হোম ডেলিভারি মাত্র</span>
-               </label>
+          <div className="space-y-6 pt-10 mt-10 border-t border-zinc-100">
+            <div className="space-y-2">
+              <h3 className="text-2xl md:text-3xl font-black text-zinc-900">Shipping</h3>
+              <p className="text-zinc-500 font-medium">আপনার ডেলিভারি এলাকা নির্বাচন করুন।</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <label
+                onClick={() => setDistrict('dhaka')}
+                className={`flex items-center gap-4 p-5 rounded-3xl border-2 cursor-pointer transition-all duration-300 group ${district === 'dhaka'
+                    ? 'border-teal-600 bg-teal-50/50 shadow-lg shadow-teal-900/5'
+                    : 'bg-white border-zinc-100 hover:border-teal-200'
+                  }`}
+              >
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${district === 'dhaka' ? 'bg-teal-600 text-white' : 'bg-zinc-50 text-zinc-400 group-hover:bg-teal-50 group-hover:text-teal-600'}`}>
+                  <Truck className="w-6 h-6" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <span className={`font-black text-lg ${district === 'dhaka' ? 'text-teal-900' : 'text-zinc-800'}`}>ঢাকার ভেতরে</span>
+                    <input type="radio" checked={district === 'dhaka'} readOnly className="w-5 h-5 accent-teal-600" />
+                  </div>
+                  <p className="text-sm font-bold text-teal-600 mt-0.5">ডেলিভারি চার্জ: ৳৬০.০০</p>
+                </div>
+              </label>
+
+              <label
+                onClick={() => setDistrict('outside')}
+                className={`flex items-center gap-4 p-5 rounded-3xl border-2 cursor-pointer transition-all duration-300 group ${district === 'outside'
+                    ? 'border-teal-600 bg-teal-50/50 shadow-lg shadow-teal-900/5'
+                    : 'bg-white border-zinc-100 hover:border-teal-200'
+                  }`}
+              >
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${district === 'outside' ? 'bg-teal-600 text-white' : 'bg-zinc-50 text-zinc-400 group-hover:bg-teal-50 group-hover:text-teal-600'}`}>
+                  <Truck className="w-6 h-6" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <span className={`font-black text-lg ${district === 'outside' ? 'text-teal-900' : 'text-zinc-800'}`}>ঢাকার বাইরে</span>
+                    <input type="radio" checked={district === 'outside'} readOnly className="w-5 h-5 accent-teal-600" />
+                  </div>
+                  <p className="text-sm font-bold text-teal-600 mt-0.5">ডেলিভারি চার্জ: ৳১২০.০০</p>
+                </div>
+              </label>
             </div>
           </div>
 
           {/* Order Summary & Checkout */}
-          <div className="pt-2">
-            <h3 className="text-xl md:text-2xl font-black text-zinc-800 mb-4">Your order</h3>
-            
-            <div className="bg-transparent mb-6">
+          <div className="space-y-8 pt-10 mt-10 border-t border-zinc-100 font-hind-siliguri">
+            <h3 className="text-2xl md:text-3xl font-black text-zinc-900">Your order</h3>
+
+            <div className="bg-white rounded-3xl border border-zinc-100 shadow-sm overflow-hidden p-6 md:p-8">
               <table className="w-full text-left">
-                 <thead>
-                    <tr className="border-b border-dashed border-zinc-300">
-                       <th className="pb-3 pt-2 font-bold text-zinc-700 text-base">Product</th>
-                       <th className="pb-3 pt-2 font-bold text-zinc-700 text-base text-right">Subtotal</th>
+                <thead>
+                  <tr className="border-b-2 border-zinc-50">
+                    <th className="pb-4 font-black text-zinc-400 text-sm uppercase tracking-wider">Product</th>
+                    <th className="pb-4 font-black text-zinc-400 text-sm uppercase tracking-wider text-right">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-zinc-50">
+                  {selectedItems.map((item, idx) => (
+                    <tr key={idx} className="group">
+                      <td className="py-5 pr-3 flex items-center gap-4">
+                        <div className="w-14 h-14 relative bg-zinc-50 border border-zinc-100 rounded-xl shrink-0 p-1 group-hover:shadow-md transition-all duration-300">
+                          <Image src={item.color.image} alt="prod" fill className="object-cover rounded-lg mix-blend-multiply" />
+                        </div>
+                        <div className="font-black text-zinc-800 text-base leading-tight">
+                          {PRODUCT.nameBn}
+                          <div className="text-teal-600 text-sm font-bold mt-1">
+                            {item.color.name} <span className="text-zinc-400 ml-1">× {item.qty}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-5 font-black text-zinc-900 text-right text-lg">
+                        ৳ {(PRODUCT.price * item.qty).toFixed(2)}
+                      </td>
                     </tr>
-                 </thead>
-                 <tbody className="divide-y divide-dashed divide-zinc-300">
-                    {selectedItems.map((item, idx) => (
-                       <tr key={idx}>
-                          <td className="py-4 pr-3 flex items-center gap-3">
-                             <div className="w-10 h-10 relative bg-white border border-zinc-200 rounded shrink-0 p-0.5 shadow-sm">
-                                <Image src={item.color.image} alt="prod" fill className="object-cover rounded-sm mix-blend-multiply" />
-                             </div>
-                             <div className="font-bold text-zinc-700 text-sm leading-snug break-words">
-                                {PRODUCT.nameBn}
-                                <span className="block text-zinc-500 font-normal text-xs">{item.color.name} × {item.qty}</span>
-                             </div>
-                          </td>
-                          <td className="py-4 font-black text-zinc-800 text-right text-sm">
-                             ৳ {(PRODUCT.price * item.qty).toFixed(2)}
-                          </td>
-                       </tr>
-                    ))}
-                    
-                    {/* Subtotal */}
-                    <tr>
-                       <td className="py-4 font-medium text-zinc-600 text-sm">Subtotal</td>
-                       <td className="py-4 font-black text-zinc-800 text-right text-sm">৳ {subtotal.toFixed(2)}</td>
-                    </tr>
-                    
-                    {/* Total Row */}
-                    <tr className="border-t-2 border-dashed border-zinc-300">
-                       <td className="py-4 font-black text-zinc-900 text-lg">Total</td>
-                       <td className="py-4 font-black text-zinc-900 text-lg text-right">৳ {total.toFixed(2)}</td>
-                    </tr>
-                 </tbody>
+                  ))}
+
+                  {/* Subtotal Row */}
+                  <tr className="bg-zinc-50/30">
+                    <td className="py-5 px-3 font-bold text-zinc-500">Subtotal</td>
+                    <td className="py-5 px-3 font-black text-zinc-900 text-right">৳ {subtotal.toFixed(2)}</td>
+                  </tr>
+
+                  {/* Delivery Fee Row */}
+                  <tr className="bg-zinc-50/30">
+                    <td className="py-5 px-3 font-bold text-zinc-500">Delivery Fee</td>
+                    <td className="py-5 px-3 font-black text-teal-600 text-right">৳ {delivery.toFixed(2)}</td>
+                  </tr>
+
+                  {/* Total Row */}
+                  <tr className="border-t-2 border-teal-600/10">
+                    <td className="py-6 px-3 font-black text-zinc-900 text-xl md:text-2xl">Total</td>
+                    <td className="py-6 px-3 font-black text-teal-600 text-right text-2xl md:text-3xl">৳ {total.toFixed(2)}</td>
+                  </tr>
+                </tbody>
               </table>
             </div>
 
             {/* Cash on Delivery & Button Block */}
             <div className="space-y-6">
-              <div className="space-y-2">
-                 <p className="font-medium text-zinc-700 px-1">Cash on delivery</p>
-                 <div className="bg-[#ebebeb] p-4 relative text-zinc-600 font-medium text-sm rounded border-l-[3px] border-l-zinc-300">
-                    <div className="absolute -top-1 left-6 w-3 h-3 bg-[#ebebeb] rotate-45 transform origin-center"></div>
-                    <span className="relative z-10 w-full block">Pay with cash upon delivery.</span>
-                 </div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 px-1">
+                  <ShieldCheck className="w-5 h-5 text-teal-600" />
+                  <p className="font-black text-zinc-800">Cash on delivery</p>
+                </div>
+                <div className="bg-[#f8f8f8] p-6 relative text-zinc-500 font-bold text-sm md:text-base rounded-3xl border-l-[6px] border-l-zinc-300 shadow-inner">
+                  <div className="absolute -top-2 left-8 w-4 h-4 bg-[#f8f8f8] rotate-45 transform origin-center border-l border-t border-zinc-100 hidden md:block"></div>
+                  <span className="relative z-10 leading-relaxed">Pay with cash upon delivery. অর্ডার কনফার্ম করতে নিচের বাটনে ক্লিক করুন।</span>
+                </div>
               </div>
 
-              <button type="submit" className="w-full bg-teal-600 hover:bg-teal-700 text-white text-lg font-bold py-4 rounded shadow-sm flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
-                 <Lock className="w-5 h-5" /> Place Order ৳{total.toFixed(2)}
+              <button
+                type="submit"
+                className="group w-full bg-teal-600 hover:bg-teal-700 text-white text-xl md:text-2xl font-black py-6 rounded-3xl shadow-[0_20px_40px_-15px_rgba(13,148,136,0.5)] flex items-center justify-center gap-4 transition-all duration-300 hover:-translate-y-1 active:scale-[0.98]"
+              >
+                <div className="bg-white/20 p-2 rounded-xl group-hover:scale-110 transition-transform">
+                  <Lock className="w-5 h-5 md:w-6 md:h-6" />
+                </div>
+                <span>Place Order ৳{total.toFixed(2)}</span>
               </button>
             </div>
           </div>
-
         </form>
       </div>
     </section>
